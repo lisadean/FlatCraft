@@ -1,15 +1,12 @@
-import pygame
-from block import Block
+from terrain import Terrain
 
 
-class Grass(Block):
-    def __init__(self):
+class Grass(Terrain):
+    def __init__(self, pos):
         super().__init__()
-        self.image = './images/clover.jpg'
-        self.pos = [0, 0]
+        self.image = './images/grass.png'
+        # self.pos = [0, 0]
+        self.pos = pos
         self.setImage(self.image)
-        self.setSizeAndPosition(self.pos)
-
-        def setImage(self, image):
-            self.image = pygame.image.load(image)
-            self.image = pygame.transform.scale(self.image, (32, 32))
+        self.setSize()
+        self.setPosition(self.pos)

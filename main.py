@@ -9,6 +9,11 @@ def main():
     fps = 50
     width = int(2560 / 2)
     height = int(1600 / 2)
+
+    tile_size = 32
+    grid_width = int(width / tile_size)
+    grid_height = int(height / tile_size)
+    print("grid height: %d width: %d" % (grid_height, grid_width))
     # blue_color = (97, 159, 182)
     # grass = (86, 104, 57)
     # bg = grass
@@ -18,9 +23,26 @@ def main():
     pygame.display.set_caption('FlatCraft')
     clock = pygame.time.Clock()
 
-    block1 = Grass()
     terrain_group = pygame.sprite.Group()
-    terrain_group.add(block1)
+
+    grid_y = 0
+    for h in range(grid_height):
+        grid_x = 0
+        for w in range(grid_width):
+            print("%d, %d" % (grid_x, grid_y))
+            terrain_group.add(Grass([grid_x, grid_y]))
+            grid_x += tile_size
+        grid_y += tile_size
+
+    # block1 = Grass([0, 0])
+    # block2 = Grass([32, 0])
+    # block3 = Grass([64, 0])
+    # block4 = Grass([96, 0])
+
+    # terrain_group.add(block1)
+    # terrain_group.add(block2)
+    # terrain_group.add(block3)
+    # terrain_group.add(block4)
 
     # player = Block([40, 50], './images/hero.png')
     player = Player()

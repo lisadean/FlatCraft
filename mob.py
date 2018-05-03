@@ -7,4 +7,5 @@ class Mob(Block):
         self.image = './images/goblin.png'
         self.pos = [100, 60]
         self.setImage(self.image)
-        self.setSizeAndPosition(self.pos)
+        self.setSize()
+        self.setPosition(self.pos)

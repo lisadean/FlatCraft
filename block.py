@@ -8,6 +8,8 @@ class Block(pygame.sprite.Sprite):
     def setImage(self, image):
         self.image = pygame.image.load(image).convert_alpha()
 
-    def setSizeAndPosition(self, pos):
+    def setSize(self):
         self.rect = self.image.get_rect()
+
+    def setPosition(self, pos):
         self.rect.center = pos
