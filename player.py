@@ -1,6 +1,7 @@
-import pygame
-from config import *
+import pygame as pg
+from config import height, width, tile_size
 from block import Block
+from resource import Grass
 
 
 class Player(Block):
@@ -9,10 +10,11 @@ class Player(Block):
         self.velocity = 32
         self.health = 100
         self.backpack = {}
+        self.backpack_text = ""
 
         self.image = './images/hero.png'
         self.pos = [96, 96]
-        self.move = [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]
+        self.move = [pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN]
 
         self.vx = self.velocity
         self.vy = self.velocity
@@ -45,6 +47,29 @@ class Player(Block):
                     new_y = height - tile_size
                 else:
                     self.rect.y = new_y
+
+    def harvest(self, harvestable_group, terrain_group):
+        harvestable = pg.sprite.spritecollide(self, harvestable_group, True)
+        for tile in harvestable:
+            tile_pos = tile.pos
+            self.addToInventory(tile.drop)
+            tile.kill()
+            new_tile = Grass(tile_pos)
+            new_tile.add(terrain_group)
+
+    def addToInventory(self, item):
+        if item not in self.backpack:
+            self.backpack[item] = 1
+        else:
+            self.backpack[item] = self.backpack[item] + 1
+        self.printInventory()
+    
+    def printInventory(self):
+        contents = ""
+        for item, quantity in self.backpack.items():
+            contents += "%s: %d\n" % (item, quantity)
+        # print(contents)
+        self.backpack_text = contents
 
     def isAlive(self):
         if self.health > 0:

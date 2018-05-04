@@ -4,9 +4,14 @@ from block import Block
 class Terrain(Block):
     def __init__(self):
         super().__init__()
+        self.name = "Generic terrain"
+        self.drop = "<undefined>"
 
     def setPosition(self, pos):
         self.rect.topleft = pos
+
+    def __repr__(self):
+        return self.name
 
 
 class Grass(Terrain):
@@ -25,6 +30,8 @@ class Tree(Terrain):
 
     def __init__(self, pos):
         super().__init__()
+        self.name = "Tree"
+        self.drop = "Wood"
         self.image = './images/tree.png'
         self.pos = pos
         self.setImage(self.image)
@@ -38,6 +45,8 @@ class Ore(Terrain):
 
     def __init__(self, pos):
         super().__init__()
+        self.name = "Ore"
+        self.drop = "Metal"
         self.image = './images/ore.png'
         self.pos = pos
         self.setImage(self.image)
