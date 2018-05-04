@@ -1,35 +1,25 @@
-import pygame
+import pygame as pg
 import random
+from config import *
 from player import Player
 from mob import Mob
-from grass import Grass
-from tree import Tree
-from ore import Ore
+# from grass import Grass
+# from tree import Tree
+# from ore import Ore
+from resource import Grass, Ore, Tree
 
 
 def main():
-    game_name = "FlatCraft"
-    fps = 50
-    width = int(2560 / 2)
-    height = int(1600 / 2)
 
-    tile_size = 32
-    grid_width = int(width / tile_size)
-    grid_height = int(height / tile_size)
-    print("grid height: %d width: %d" % (grid_height, grid_width))
+    pg.init()
+    clock = pg.time.Clock()
 
-    pygame.init()
-    clock = pygame.time.Clock()
-
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption(game_name)
-
-    #  Doesn't seem to do shit
-    # pygame.key.set_repeat()
+    screen = pg.display.set_mode((width, height))
+    pg.display.set_caption(game_name)
 
     #  Build world
 
-    terrain_group = pygame.sprite.Group()
+    terrain_group = pg.sprite.Group()
     grid_y = 0
     for h in range(grid_height):
         grid_x = 0
@@ -48,11 +38,11 @@ def main():
     #  Create characters
 
     player = Player()
-    player_group = pygame.sprite.Group()
+    player_group = pg.sprite.Group()
     player_group.add(player)
 
     mob = Mob()
-    mob_group = pygame.sprite.Group()
+    mob_group = pg.sprite.Group()
     mob_group.add(mob)
 
     # Game initialization
@@ -60,17 +50,17 @@ def main():
     stop_game = False
     while not stop_game:
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
                 stop_game = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_q:
                     stop_game = True
                 else:
                     player.handle_keydown(event.key)
 
         # Game logic
-        hit = pygame.sprite.spritecollide(player, mob_group, True)
+        hit = pg.sprite.spritecollide(player, mob_group, True)
         if hit:
             player.image.fill((255, 255, 255))
 
@@ -79,11 +69,11 @@ def main():
         player_group.draw(screen)
         mob_group.draw(screen)
 
-        pygame.display.update()
+        pg.display.update()
 
         clock.tick(fps)
 
-    pygame.quit()
+    pg.quit()
 
 
 if __name__ == '__main__':
