@@ -12,4 +12,5 @@ class Block(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def setPosition(self, pos):
-        self.rect.center = pos
+        # self.rect.center = pos
+        self.rect.topleft = pos

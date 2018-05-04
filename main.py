@@ -8,6 +8,7 @@ from ore import Ore
 
 
 def main():
+    game_name = "FlatCraft"
     fps = 50
     width = int(2560 / 2)
     height = int(1600 / 2)
@@ -18,18 +19,21 @@ def main():
     print("grid height: %d width: %d" % (grid_height, grid_width))
 
     pygame.init()
-    screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption('FlatCraft')
     clock = pygame.time.Clock()
 
-    terrain_group = pygame.sprite.Group()
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption(game_name)
 
+    #  Doesn't seem to do shit
+    # pygame.key.set_repeat()
+
+    #  Build world
+
+    terrain_group = pygame.sprite.Group()
     grid_y = 0
     for h in range(grid_height):
         grid_x = 0
         for w in range(grid_width):
-            # print("%d, %d" % (grid_x, grid_y))
-
             roll = random.randint(1, 100)
             # Order in increasing scarcity_percentage order
             if roll in range(Ore.scarcity_percentage):
@@ -38,20 +42,16 @@ def main():
                 terrain_group.add(Tree([grid_x, grid_y]))
             else:
                 terrain_group.add(Grass([grid_x, grid_y]))
-
             grid_x += tile_size
         grid_y += tile_size
 
-    player = Player()
-    player.move = [pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN]
-    player.vx = 5
-    player.vy = 5
+    #  Create characters
 
+    player = Player()
     player_group = pygame.sprite.Group()
     player_group.add(player)
 
     mob = Mob()
-
     mob_group = pygame.sprite.Group()
     mob_group.add(mob)
 
@@ -59,22 +59,15 @@ def main():
 
     stop_game = False
     while not stop_game:
+
         for event in pygame.event.get():
-
-            # Event handling
-
             if event.type == pygame.QUIT:
                 stop_game = True
-
-        key = pygame.key.get_pressed()
-
-        for i in range(2):
-            if key[player.move[i]]:
-                player.rect.x += player.vx * [-1, 1][i]
-
-        for i in range(2):
-            if key[player.move[2:4][i]]:
-                player.rect.y += player.vy * [-1, 1][i]
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q:
+                    stop_game = True
+                else:
+                    player.handle_keydown(event.key)
 
         # Game logic
         hit = pygame.sprite.spritecollide(player, mob_group, True)
@@ -87,6 +80,7 @@ def main():
         mob_group.draw(screen)
 
         pygame.display.update()
+
         clock.tick(fps)
 
     pygame.quit()
