@@ -9,13 +9,14 @@ class Player(Block):
     def __init__(self):
         super().__init__()
         self.velocity = 32
-        self.health = 100
+        self.health = 2
         self.armor = 0
         self.backpack = {}
         self.backpack_text = ""
         self.status_text = ""
 
         self.image = './images/hero.png'
+        self.hit_sound = './sounds/hit.ogg'
         # self.pos = [96, 0]
         self.pos = [floor(grid_width/2) * tile_size, floor(grid_height/2) * tile_size]
         self.move = [pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN]
@@ -57,6 +58,7 @@ class Player(Block):
         for tile in harvestable:
             tile_pos = tile.pos
             self.addToInventory(tile.drop)
+            pg.mixer.Sound(tile.harvest_sound).play()
             tile.kill()
             new_tile = Grass(tile_pos)
             new_tile.add(terrain_group)
@@ -67,7 +69,7 @@ class Player(Block):
         else:
             self.backpack[item] = self.backpack[item] + 1
         self.printInventory()
-    
+
     def printInventory(self):
         contents = ""
         for item, quantity in self.backpack.items():
@@ -75,8 +77,15 @@ class Player(Block):
         # print(contents)
         self.backpack_text = contents
 
-    def isAlive(self):
-        if self.health > 0:
+    def takeDamage(self):
+        pg.mixer.Sound(self.hit_sound).play()
+        if self.armor > 0:
+            self.armor -= 1
+        else:
+            self.health -= 1
+
+    def isDead(self):
+        if self.health <= 0:
             return True
         else:
             return False

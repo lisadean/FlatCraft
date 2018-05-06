@@ -6,6 +6,7 @@ class Terrain(Block):
         super().__init__()
         self.name = "Generic terrain"
         self.drop = "<undefined>"
+        self.harvest_sound = "<undefined>"
 
     def setPosition(self, pos):
         self.rect.topleft = pos
@@ -33,6 +34,7 @@ class Tree(Terrain):
         self.name = "Tree"
         self.drop = "Wood"
         self.image = './images/tree.png'
+        self.harvest_sound = './sounds/wood_chop.ogg'
         self.pos = pos
         self.setImage(self.image)
         self.setSize()
@@ -48,6 +50,7 @@ class Ore(Terrain):
         self.name = "Ore"
         self.drop = "Metal"
         self.image = './images/ore.png'
+        self.harvest_sound = './sounds/ore_mine.ogg'
         self.pos = pos
         self.setImage(self.image)
         self.setSize()

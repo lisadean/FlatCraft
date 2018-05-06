@@ -44,6 +44,7 @@ def display_status(screen, player):
 def main():
 
     pg.init()
+    pg.mixer.init()
     clock = pg.time.Clock()
 
     screen = pg.display.set_mode((width, height))
@@ -77,6 +78,9 @@ def main():
     stop_game = False
     while not stop_game:
 
+        if player.isDead():
+            stop_game = True
+
         for event in pg.event.get():
 
             if event.type == pg.QUIT:
@@ -100,7 +104,7 @@ def main():
         # Game logic
         mob_contact = pg.sprite.spritecollide(player, mob_group, True)
         if mob_contact:
-            screen.fill(red)
+            player.takeDamage()
 
         player_group.update()
         mob_group.update()
