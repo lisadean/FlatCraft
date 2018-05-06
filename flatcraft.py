@@ -1,9 +1,9 @@
 import pygame as pg
 import random
 from config import height, width, fps, title, grid_height, grid_width
-from config import tile_size, white
+from config import tile_size, white, red
 from player import Player
-# from mob import Mob
+from mob import Mob
 from resource import Grass, Ore, Tree
 
 
@@ -29,11 +29,12 @@ def build_world():
     return terrain_group, harvestable_group
 
 
-def display_inventory(screen, player):
+def display_status(screen, player):
         font = pg.font.Font(None, 36)
         x = 10
         y = 10
-        for line in player.backpack_text.splitlines():
+        status = player.status_text + "\n" + player.backpack_text
+        for line in status.splitlines():
             line_surface = font.render(line, 1, white)
             line_height = line_surface.get_height()
             screen.blit(line_surface, [x, y])
@@ -48,6 +49,8 @@ def main():
     screen = pg.display.set_mode((width, height))
     pg.display.set_caption(title)
 
+    #  Build random terrain
+
     terrain_group, harvestable_group = build_world()
 
     #  Create characters
@@ -56,9 +59,18 @@ def main():
     player_group = pg.sprite.Group()
     player_group.add(player)
 
-    # mob = Mob()
-    # mob_group = pg.sprite.Group()
-    # mob_group.add(mob)
+    mob_group = pg.sprite.Group()
+    mob_group.add(Mob())
+
+    #  Mob timers
+
+    move_event = pg.USEREVENT+1
+    time_to_move = 2000  # 2 seconds
+    pg.time.set_timer(move_event, time_to_move)
+
+    mob_spawn_event = pg.USEREVENT+2
+    time_to_spawn = 20000  # 20 seconds
+    pg.time.set_timer(mob_spawn_event, time_to_spawn)
 
     # Game initialization
 
@@ -71,24 +83,34 @@ def main():
                 stop_game = True
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_q:  # quit
+                if event.key == pg.K_q:
                     stop_game = True
-                elif event.key == pg.K_h:  # harvest
+                elif event.key == pg.K_h:
                     player.harvest(harvestable_group, terrain_group)
                 else:
                     player.handle_keydown(event.key)
 
+            if event.type == move_event:
+                for mob in mob_group.sprites():
+                    mob.move(player)
+
+            if event.type == mob_spawn_event:
+                mob_group.add(Mob())
+
         # Game logic
-        # hit = pg.sprite.spritecollide(player, mob_group, True)
-        # if hit:
-        #     player.image.fill((255, 255, 255))
+        mob_contact = pg.sprite.spritecollide(player, mob_group, True)
+        if mob_contact:
+            screen.fill(red)
+
+        player_group.update()
+        mob_group.update()
 
         # Game display
         terrain_group.draw(screen)
         player_group.draw(screen)
-        # mob_group.draw(screen)
+        mob_group.draw(screen)
 
-        display_inventory(screen, player)
+        display_status(screen, player)
 
         pg.display.update()
 

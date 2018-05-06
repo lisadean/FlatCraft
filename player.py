@@ -1,5 +1,6 @@
 import pygame as pg
-from config import height, width, tile_size
+from math import floor
+from config import height, width, tile_size, grid_height, grid_width
 from block import Block
 from resource import Grass
 
@@ -9,11 +10,14 @@ class Player(Block):
         super().__init__()
         self.velocity = 32
         self.health = 100
+        self.armor = 0
         self.backpack = {}
         self.backpack_text = ""
+        self.status_text = ""
 
         self.image = './images/hero.png'
-        self.pos = [96, 96]
+        # self.pos = [96, 0]
+        self.pos = [floor(grid_width/2) * tile_size, floor(grid_height/2) * tile_size]
         self.move = [pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN]
 
         self.vx = self.velocity
@@ -76,3 +80,9 @@ class Player(Block):
             return True
         else:
             return False
+
+    def update(self):
+        status = "Health: %d\n" % self.health
+        status += "Armor: %d\n" % self.armor
+        status += "\n"
+        self.status_text = status
