@@ -1,7 +1,7 @@
 import pygame as pg
 import random
 from config import height, width, fps, title, grid_height, grid_width
-from config import tile_size, white, red
+from config import tile_size, white, time_to_spawn, time_to_move
 from player import Player
 from mob import Mob
 from resource import Grass, Ore, Tree
@@ -45,6 +45,9 @@ def main():
 
     pg.init()
     pg.mixer.init()
+    pg.mixer.music.load('./sounds/music.ogg')
+    pg.mixer.music.play()
+    pg.mixer.music.set_volume(0.5)
     clock = pg.time.Clock()
 
     screen = pg.display.set_mode((width, height))
@@ -63,14 +66,14 @@ def main():
     mob_group = pg.sprite.Group()
     mob_group.add(Mob())
 
+    house_group = pg.sprite.Group()
+
     #  Mob timers
 
     move_event = pg.USEREVENT+1
-    time_to_move = 2000  # 2 seconds
     pg.time.set_timer(move_event, time_to_move)
 
     mob_spawn_event = pg.USEREVENT+2
-    time_to_spawn = 20000  # 20 seconds
     pg.time.set_timer(mob_spawn_event, time_to_spawn)
 
     # Game initialization
@@ -81,22 +84,30 @@ def main():
         if player.isDead():
             stop_game = True
 
+        #  Event handling
+
         for event in pg.event.get():
 
             if event.type == pg.QUIT:
                 stop_game = True
 
             if event.type == pg.KEYDOWN:
-                if event.key == pg.K_q:
+                if event.key == pg.K_q and pg.key.get_mods() & pg.KMOD_META:
                     stop_game = True
-                elif event.key == pg.K_h:
+                elif event.key == pg.K_SPACE:
                     player.harvest(harvestable_group, terrain_group)
+                elif event.key == pg.K_a:
+                    player.buildArmor()
+                elif event.key == pg.K_h:
+                    player.buildHouse([player.rect.x, player.rect.y],
+                                      harvestable_group,
+                                      mob_group, house_group)
                 else:
-                    player.handle_keydown(event.key)
+                    player.move(event.key)
 
             if event.type == move_event:
                 for mob in mob_group.sprites():
-                    mob.move(player)
+                    mob.move(player, house_group)
 
             if event.type == mob_spawn_event:
                 mob_group.add(Mob())
@@ -106,11 +117,14 @@ def main():
         if mob_contact:
             player.takeDamage()
 
+        terrain_group.update()
+        house_group.update()
         player_group.update()
         mob_group.update()
 
         # Game display
         terrain_group.draw(screen)
+        house_group.draw(screen)
         player_group.draw(screen)
         mob_group.draw(screen)
 
