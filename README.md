@@ -2,7 +2,9 @@
 
 Stripped down 2D version of Minecraft using the pygame library
 
-Move using arrow keys. Quit using Cmd + Q or Windows + Q.
+Flatcraft.py is the main game file to run.
+
+Move using arrow keys.
 
 A new goblin spawns every two seconds from the lower right corner and starts 
 moving toward the player. If a goblin touches the player, the goblin dies and 
