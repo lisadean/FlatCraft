@@ -1,3 +1,4 @@
+import pygame as pg
 from pygame.sprite import spritecollide
 from block import Block
 
@@ -8,6 +9,7 @@ class House(Block):
         super().__init__()
         self.name = "House"
         self.image = './images/house4.png'
+        self.boom = './sounds/boom.ogg'
         self.setImage(self.image)
         self.setSize()
         self.setPosition(pos)
@@ -15,6 +17,7 @@ class House(Block):
             self = None
         elif spritecollide(self, mob_group, True):
             house_group.add(self)  # Drop a house on a mob to kill it
+            pg.mixer.Sound(self.boom).play()
         elif spritecollide(self, house_group, False):
             self = None
         else:
