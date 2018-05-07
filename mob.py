@@ -11,7 +11,7 @@ class Mob(Block):
         images = ['./images/goblin.png',
                   './images/monster.png']
         self.image = images[randint(0, 1)]
-        self.pos = [(1, 1), (1, height), (width, 1), 
+        self.pos = [(1, 1), (1, height), (width, 1),
                     (width, height)][randint(0, 3)]
         self.vx = self.velocity
         self.vy = self.velocity
@@ -60,4 +60,3 @@ class Mob(Block):
         # print("Player: [%d, %d] Mob: [%d, %d]" % (player.rect.x,
         #                                           player.rect.y,
         #                                           self.rect.x, self.rect.y))
-
