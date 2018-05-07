@@ -9,7 +9,7 @@ from house import House
 class Player(Block):
     def __init__(self):
         super().__init__()
-        self.velocity = 32
+        self.velocity = tile_size
         self.health = 2
         self.armor = 0
         self.backpack = {}
@@ -18,7 +18,7 @@ class Player(Block):
 
         self.image = './images/hero.png'
         self.hit_sound = './sounds/hit.ogg'
-        # self.pos = [96, 0]
+        self.block_sound = './sounds/armor_block.ogg'
         self.pos = [floor(grid_width/2) * tile_size,
                     floor(grid_height/2) * tile_size]
         self.movements = [pg.K_LEFT, pg.K_RIGHT, pg.K_UP, pg.K_DOWN]
@@ -104,10 +104,11 @@ class Player(Block):
         self.backpack_text = contents
 
     def takeDamage(self):
-        pg.mixer.Sound(self.hit_sound).play()
         if self.armor > 0:
+            pg.mixer.Sound(self.block_sound).play()
             self.armor -= 1
         else:
+            pg.mixer.Sound(self.hit_sound).play()
             self.health -= 1
 
     def isDead(self):

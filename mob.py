@@ -1,16 +1,18 @@
+from random import randint
 from pygame.sprite import spritecollide
 from block import Block
 from config import tile_size, width, height
-import spritesheet
 
 
 class Mob(Block):
     def __init__(self):
         super().__init__()
         self.velocity = tile_size
-        self.image = './images/goblin.png'
-        self.pos = [width, height]
-
+        images = ['./images/goblin.png',
+                  './images/monster.png']
+        self.image = images[randint(0, 1)]
+        self.pos = [(1, 1), (1, height), (width, 1), 
+                    (width, height)][randint(0, 3)]
         self.vx = self.velocity
         self.vy = self.velocity
 
@@ -59,16 +61,3 @@ class Mob(Block):
         #                                           player.rect.y,
         #                                           self.rect.x, self.rect.y))
 
-
-class Skeleton(Mob):
-    # ### DO NOT USE ###
-    # Sprite sheet doesn't work yet
-    def __init__(self):
-        super().__init__()
-
-        ss = spritesheet.spritesheet('./images/skeleton-front.png')
-        images = []
-        # Load two images into an array, their transparent bit is
-        # (255, 255, 255)
-        images = ss.images_at([(0, 0, 32, 32), (33, 0, 32, 32)], colorkey=-1)
-        self.image = images[0]
