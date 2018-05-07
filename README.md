@@ -17,7 +17,7 @@ inventory. Each piece of armor can take 1 damage.
 
 Houses can be crafted and placed using the 'h' key using four wood from the 
 inventory. The house can't be placed on harvestable wood or metal but CAN be 
-placed on a goblin. Which will kill it. And it very satisfying. The golins can't
+placed on a goblin. Which will kill it. And it is very satisfying. The golins can't
 enter the house but will pile up patiently outside it waiting for the player.
 
 ![Game image](./images/readme1.png)
