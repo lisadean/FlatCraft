@@ -6,7 +6,7 @@ Flatcraft.py is the main game file to run.
 
 Move using arrow keys.
 
-A new goblin spawns every two seconds from the lower right corner and starts 
+A new goblin spawns every two seconds from a random corner and starts 
 moving toward the player. If a goblin touches the player, the goblin dies and 
 the player takes 1 damage. If a goblin touches a player with 1 health and no 
 armor, the player dies and the game quits.
